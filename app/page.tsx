@@ -1,9 +1,9 @@
-import { GroupDetail } from "@/components/group-detail"
+import { InviteMemberForm } from "@/components/invite-member-form"
 
 export default function Page() {
   return (
     <main>
-      <GroupDetail />
+      <InviteMemberForm />
     </main>
   )
 }
