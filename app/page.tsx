@@ -1,9 +1,9 @@
-import { GroupsList } from "@/components/groups-list"
+import { CreateGroupForm } from "@/components/create-group-form"
 
 export default function Page() {
   return (
     <main>
-      <GroupsList />
+      <CreateGroupForm />
     </main>
   )
 }
