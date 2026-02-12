@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import { useNavigate } from "react-router-dom"
+import { useRouter } from "next/navigation"
 import { ArrowLeft, Users, Lock, Eye, EyeOff, Loader2, Check } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -14,7 +14,7 @@ interface FormErrors {
 }
 
 export function CreateGroupForm() {
-  const navigate = useNavigate()
+  const router = useRouter()
   const [name, setName] = useState("")
   const [pin, setPin] = useState("")
   const [showPin, setShowPin] = useState(false)
@@ -136,7 +136,7 @@ export function CreateGroupForm() {
               size="icon"
               className="h-9 w-9 shrink-0 text-muted-foreground"
               aria-label="Volver"
-              onClick={() => navigate(-1)}
+              onClick={() => router.back()}
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>

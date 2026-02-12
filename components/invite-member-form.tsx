@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import { useNavigate } from "react-router-dom"
+import { useRouter } from "next/navigation"
 import { ArrowLeft, Mail, Shield, User, Send, CheckCircle2, Loader2 } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -79,7 +79,7 @@ function RoleCard({
   )
 }
 
-function SuccessScreen({ email, role, onReset }: { email: string; role: Role; onReset: () => void }) {
+function SuccessScreen({ email, role, onReset, onBack }: { email: string; role: Role; onReset: () => void; onBack: () => void }) {
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-6 px-5">
       <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[hsl(var(--success))]/10">
@@ -103,7 +103,7 @@ function SuccessScreen({ email, role, onReset }: { email: string; role: Role; on
           <Send className="h-4 w-4" />
           Invitar a otro miembro
         </Button>
-        <Button variant="ghost" className="h-10 w-full text-sm text-muted-foreground" onClick={() => navigate(-1)}>
+        <Button variant="ghost" className="h-10 w-full text-sm text-muted-foreground" onClick={onBack}>
           <ArrowLeft className="h-4 w-4" />
           Volver al grupo
         </Button>
@@ -113,7 +113,7 @@ function SuccessScreen({ email, role, onReset }: { email: string; role: Role; on
 }
 
 export function InviteMemberForm() {
-  const navigate = useNavigate()
+  const router = useRouter()
   const [form, setForm] = useState<FormState>({
     email: "",
     role: "Miembro",
@@ -165,7 +165,7 @@ export function InviteMemberForm() {
             </div>
           </div>
         </header>
-        <SuccessScreen email={form.email} role={form.role} onReset={handleReset} />
+        <SuccessScreen email={form.email} role={form.role} onReset={handleReset} onBack={() => router.back()} />
       </div>
     )
   }
@@ -181,7 +181,7 @@ export function InviteMemberForm() {
               size="icon"
               className="h-9 w-9 shrink-0 text-muted-foreground"
               aria-label="Volver"
-              onClick={() => navigate(-1)}
+              onClick={() => router.back()}
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>

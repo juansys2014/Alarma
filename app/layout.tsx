@@ -6,8 +6,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata: Metadata = {
-  title: 'Iniciar sesion',
-  description: 'Inicia sesion con tu email usando un codigo de verificacion',
+  title: 'Alarma - Sistema de alertas',
+  description: 'Gestiona grupos, contactos y alertas de emergencia',
 }
 
 export const viewport: Viewport = {

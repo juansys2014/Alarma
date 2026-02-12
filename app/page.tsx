@@ -1,5 +1,5 @@
-import { AppRouter } from "@/components/routes"
+import { redirect } from "next/navigation"
 
-export default function Page() {
-  return <AppRouter />
+export default function HomePage() {
+  redirect("/grupos")
 }

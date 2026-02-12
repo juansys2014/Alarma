@@ -1,6 +1,6 @@
 "use client"
 
-import { useNavigate } from "react-router-dom"
+import { useRouter } from "next/navigation"
 import { Users, Plus, ChevronRight } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -96,7 +96,7 @@ function GroupCard({ group, onSelect }: { group: Group; onSelect: () => void }) 
 }
 
 export function GroupsList() {
-  const navigate = useNavigate()
+  const router = useRouter()
   return (
     <div className="flex min-h-svh flex-col bg-background">
       {/* Header */}
@@ -115,14 +115,14 @@ export function GroupsList() {
       <div className="flex-1 px-5 pb-28 pt-4">
         <div className="mx-auto flex w-full max-w-lg flex-col gap-3">
           {MOCK_GROUPS.map((group) => (
-            <GroupCard key={group.id} group={group} onSelect={() => navigate(`/groups/${group.id}`)} />
+            <GroupCard key={group.id} group={group} onSelect={() => router.push(`/grupos/${group.id}`)} />
           ))}
 
           {/* Crear grupo inline */}
           <Button
             variant="outline"
             className="h-12 w-full border-dashed text-sm font-medium text-muted-foreground"
-            onClick={() => navigate("/groups/new")}
+            onClick={() => router.push("/grupos/nuevo")}
           >
             <Plus className="h-4 w-4" />
             Crear Grupo

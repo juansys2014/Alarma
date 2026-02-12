@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { useRouter } from "next/navigation"
 import { ArrowLeft, ChevronDown, ShieldAlert, CheckCircle2, Loader2, X, AlertTriangle } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -290,7 +290,7 @@ function CancelPinModal({
 }
 
 export function PanicButtonScreen() {
-  const navigate = useNavigate()
+  const router = useRouter()
   const [selectedGroup, setSelectedGroup] = useState(MOCK_GROUPS[0].id)
   const [panicState, setPanicState] = useState<PanicState>("idle")
   const [holdProgress, setHoldProgress] = useState(0)
@@ -328,7 +328,7 @@ export function PanicButtonScreen() {
           setHoldProgress(100)
           // Auto-navigate to event detail after brief feedback
           setTimeout(() => {
-            navigate("/events/ALR-0042")
+            router.push("/eventos/ALR-0042")
           }, 1200)
         }, 2000)
       }
@@ -370,7 +370,7 @@ export function PanicButtonScreen() {
             size="icon"
             className="h-9 w-9 shrink-0"
             aria-label="Volver"
-            onClick={() => navigate(-1)}
+            onClick={() => router.back()}
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>

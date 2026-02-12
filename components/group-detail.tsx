@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useRouter, usePathname } from "next/navigation"
 import {
   ArrowLeft,
   Users,
@@ -355,7 +355,8 @@ const TAB_CONFIG = [
 ] as const
 
 export function GroupDetail() {
-  const navigate = useNavigate()
+  const router = useRouter()
+  const pathname = usePathname()
   const [activeTab, setActiveTab] = useState<string>("miembros")
 
   return (
@@ -369,7 +370,7 @@ export function GroupDetail() {
               size="icon"
               className="h-9 w-9 shrink-0 text-muted-foreground"
               aria-label="Volver"
-              onClick={() => navigate(-1)}
+              onClick={() => router.back()}
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
@@ -421,7 +422,7 @@ export function GroupDetail() {
       {/* Tab content */}
       <div className="flex-1 px-5 pb-8 pt-4">
         <div className="mx-auto w-full max-w-lg">
-          {activeTab === "miembros" && <MembersTab onInvite={() => navigate("invite")} />}
+          {activeTab === "miembros" && <MembersTab onInvite={() => router.push(`${pathname}/invitar`)} />}
           {activeTab === "destinatarios" && <RecipientsTab />}
           {activeTab === "dispositivos" && <DevicesTab />}
           {activeTab === "historial" && <HistoryTab />}
