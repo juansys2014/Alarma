@@ -108,18 +108,27 @@ export function CreateGroupForm() {
           <p className="mt-2 text-center text-sm text-muted-foreground">
             {'"'}{name.trim()}{'"'} se ha creado correctamente.
           </p>
-          <Button
-            className="mt-8 h-12 w-full max-w-xs text-base font-medium"
-            onClick={() => {
-              setIsSuccess(false)
-              setName("")
-              setPin("")
-              setTouched({})
-              setErrors({})
-            }}
-          >
-            Crear otro grupo
-          </Button>
+          <div className="mt-8 flex w-full max-w-xs flex-col gap-2.5">
+            <Button
+              className="h-12 w-full text-base font-medium"
+              onClick={() => router.push("/grupos/nuevo-grupo")}
+            >
+              Ver grupo
+            </Button>
+            <Button
+              variant="outline"
+              className="h-12 w-full text-base font-medium"
+              onClick={() => {
+                setIsSuccess(false)
+                setName("")
+                setPin("")
+                setTouched({})
+                setErrors({})
+              }}
+            >
+              Crear otro grupo
+            </Button>
+          </div>
         </div>
       </div>
     )

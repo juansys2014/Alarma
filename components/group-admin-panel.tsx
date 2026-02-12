@@ -165,6 +165,13 @@ export function GroupAdminPanel({ groupId }: { groupId: string }) {
 
             {/* Members tab */}
             <TabsContent value="miembros" className="flex flex-col gap-2">
+              <Button
+                className="h-11 w-full text-sm font-medium"
+                onClick={() => router.push(`/grupos/${groupId}/invitar`)}
+              >
+                <UserPlus className="h-4 w-4" />
+                Invitar Miembro
+              </Button>
               {members.map((m) => (
                 <Card key={m.userId} className="flex items-center gap-3 p-3.5">
                   <Avatar className="h-10 w-10 rounded-xl">
