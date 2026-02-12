@@ -1,9 +1,9 @@
-import { LoginForm } from "@/components/login-form"
+import { GroupsList } from "@/components/groups-list"
 
 export default function Page() {
   return (
     <main>
-      <LoginForm />
+      <GroupsList />
     </main>
   )
 }
