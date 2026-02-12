@@ -1,6 +1,6 @@
 "use client"
 
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom"
 import { AppLayout } from "./app-layout"
 import { LoginForm } from "./login-form"
 import { GroupsList } from "./groups-list"
@@ -13,7 +13,7 @@ import { AlertDetailScreen } from "./alert-detail-screen"
 
 export function AppRouter() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         {/* Login - sin bottom nav */}
         <Route path="/login" element={<LoginForm />} />
@@ -32,6 +32,6 @@ export function AppRouter() {
         {/* Redirect raiz a groups (mock sesion activa) */}
         <Route path="*" element={<Navigate to="/groups" replace />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
