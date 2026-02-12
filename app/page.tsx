@@ -1,9 +1,9 @@
-import { CreateGroupForm } from "@/components/create-group-form"
+import { GroupDetail } from "@/components/group-detail"
 
 export default function Page() {
   return (
     <main>
-      <CreateGroupForm />
+      <GroupDetail />
     </main>
   )
 }
