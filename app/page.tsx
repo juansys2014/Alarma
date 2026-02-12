@@ -1,9 +1,9 @@
-import { InviteMemberForm } from "@/components/invite-member-form"
+import { ContactsScreen } from "@/components/contacts-screen"
 
 export default function Page() {
   return (
     <main>
-      <InviteMemberForm />
+      <ContactsScreen />
     </main>
   )
 }
