@@ -1,9 +1,9 @@
-import { PanicButtonScreen } from "@/components/panic-button-screen"
+import { AlertDetailScreen } from "@/components/alert-detail-screen"
 
 export default function Page() {
   return (
     <main>
-      <PanicButtonScreen />
+      <AlertDetailScreen />
     </main>
   )
 }
