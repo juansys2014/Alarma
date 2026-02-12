@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useCallback } from "react"
+import { useNavigation } from "./app-shell"
 import {
   ArrowLeft,
   MapPin,
@@ -527,6 +528,7 @@ function CallingDialog({
 // --- Main Component ---
 
 export function AlertDetailScreen() {
+  const { goBack } = useNavigation()
   const [alert, setAlert] = useState(MOCK_ALERT)
   const [responseStatus, setResponseStatus] = useState<ResponseStatus>("none")
   const [showCancelDialog, setShowCancelDialog] = useState(false)
@@ -547,8 +549,9 @@ export function AlertDetailScreen() {
           <Button
             variant="ghost"
             size="icon"
-            className="h-9 w-9 shrink-0 text-muted-foreground"
+              className="h-9 w-9 shrink-0 text-muted-foreground"
             aria-label="Volver"
+            onClick={goBack}
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>

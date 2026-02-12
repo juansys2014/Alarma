@@ -1,9 +1,9 @@
-import { AlertDetailScreen } from "@/components/alert-detail-screen"
+import { AppShell } from "@/components/app-shell"
 
 export default function Page() {
   return (
     <main>
-      <AlertDetailScreen />
+      <AppShell />
     </main>
   )
 }

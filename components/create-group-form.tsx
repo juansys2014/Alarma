@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useCallback } from "react"
+import { useNavigation } from "./app-shell"
 import { ArrowLeft, Users, Lock, Eye, EyeOff, Loader2, Check } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -13,6 +14,7 @@ interface FormErrors {
 }
 
 export function CreateGroupForm() {
+  const { goBack } = useNavigation()
   const [name, setName] = useState("")
   const [pin, setPin] = useState("")
   const [showPin, setShowPin] = useState(false)
@@ -134,6 +136,7 @@ export function CreateGroupForm() {
               size="icon"
               className="h-9 w-9 shrink-0 text-muted-foreground"
               aria-label="Volver"
+              onClick={goBack}
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>

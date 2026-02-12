@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useNavigation } from "./app-shell"
 import {
   ArrowLeft,
   Users,
@@ -105,10 +106,10 @@ function roleBadgeVariant(role: Member["role"]): "default" | "secondary" | "outl
   return "outline"
 }
 
-function MembersTab() {
+function MembersTab({ onInvite }: { onInvite: () => void }) {
   return (
     <div className="flex flex-col gap-3">
-      <Button className="h-11 w-full text-sm font-medium">
+      <Button className="h-11 w-full text-sm font-medium" onClick={onInvite}>
         <UserPlus className="h-4 w-4" />
         Invitar Miembro
       </Button>
@@ -354,6 +355,7 @@ const TAB_CONFIG = [
 ] as const
 
 export function GroupDetail() {
+  const { navigate, goBack } = useNavigation()
   const [activeTab, setActiveTab] = useState<string>("miembros")
 
   return (
@@ -367,6 +369,7 @@ export function GroupDetail() {
               size="icon"
               className="h-9 w-9 shrink-0 text-muted-foreground"
               aria-label="Volver"
+              onClick={goBack}
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
@@ -418,7 +421,7 @@ export function GroupDetail() {
       {/* Tab content */}
       <div className="flex-1 px-5 pb-8 pt-4">
         <div className="mx-auto w-full max-w-lg">
-          {activeTab === "miembros" && <MembersTab />}
+          {activeTab === "miembros" && <MembersTab onInvite={() => navigate("invite-member")} />}
           {activeTab === "destinatarios" && <RecipientsTab />}
           {activeTab === "dispositivos" && <DevicesTab />}
           {activeTab === "historial" && <HistoryTab />}

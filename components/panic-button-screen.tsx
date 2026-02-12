@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
+import { useNavigation } from "./app-shell"
 import { ArrowLeft, ChevronDown, ShieldAlert, CheckCircle2, Loader2, X, AlertTriangle } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -289,6 +290,7 @@ function CancelPinModal({
 }
 
 export function PanicButtonScreen() {
+  const { goBack } = useNavigation()
   const [selectedGroup, setSelectedGroup] = useState(MOCK_GROUPS[0].id)
   const [panicState, setPanicState] = useState<PanicState>("idle")
   const [holdProgress, setHoldProgress] = useState(0)
@@ -364,6 +366,7 @@ export function PanicButtonScreen() {
             size="icon"
             className="h-9 w-9 shrink-0"
             aria-label="Volver"
+            onClick={goBack}
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
