@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { mockGroups } from "@/lib/mock-data"
-import { ArrowLeft, Search, Layers, Users, ChevronRight } from "lucide-react"
+import { ArrowLeft, Search, Layers, Users, ChevronRight, Plus } from "lucide-react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -54,6 +54,14 @@ export function AdminGroups() {
 
       <div className="flex-1 px-5 pb-28 pt-2">
         <div className="mx-auto flex w-full max-w-lg flex-col gap-2">
+          <Button
+            className="h-11 w-full text-sm font-medium"
+            onClick={() => router.push("/grupos/nuevo")}
+          >
+            <Plus className="h-4 w-4" />
+            Crear Grupo
+          </Button>
+
           {filtered.map((g) => (
             <Card
               key={g.id}

@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useAuth } from "@/lib/auth-context"
 import { mockUsers, mockGroups, mockGroupEvents } from "@/lib/mock-data"
-import { Users, Layers, ShieldAlert, ArrowRight, Shield } from "lucide-react"
+import { Users, Layers, ShieldAlert, ArrowRight, Shield, Plus } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -70,6 +70,21 @@ export function AdminDashboard() {
 
           {/* Quick links */}
           <h2 className="mt-2 text-sm font-semibold text-muted-foreground">Accesos rapidos</h2>
+
+          <Link href="/grupos/nuevo">
+            <Card className="flex items-center justify-between p-4 transition-colors hover:bg-muted/50">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
+                  <Plus className="h-4 w-4 text-primary-foreground" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-sm font-semibold text-foreground">Crear Grupo</span>
+                  <span className="text-xs text-muted-foreground">Nuevo grupo de alertas</span>
+                </div>
+              </div>
+              <ArrowRight className="h-4 w-4 text-muted-foreground" />
+            </Card>
+          </Link>
 
           <Link href="/admin/usuarios">
             <Card className="flex items-center justify-between p-4 transition-colors hover:bg-muted/50">
