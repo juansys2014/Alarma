@@ -1,6 +1,19 @@
 "use client"
 
 import { useState, useCallback } from "react"
+import {
+  ArrowLeft,
+  MapPin,
+  Phone,
+  XCircle,
+  CheckCircle2,
+  Compass,
+  Loader2,
+  AlertTriangle,
+  Lock,
+  Check,
+  Navigation,
+} from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -72,46 +85,22 @@ function timeSince(iso: string) {
 
 // --- Sub-components ---
 
-function AlertHeader({
-  alert,
-}: {
-  alert: typeof MOCK_ALERT
-}) {
-  return (
-    <div className="sticky top-0 z-10 bg-background border-b border-border">
-      <div className="flex items-center gap-3 px-4 py-3">
-        <button
-          className="flex items-center justify-center w-9 h-9 rounded-full bg-secondary text-foreground"
-          aria-label="Volver"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
-        </button>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <h1 className="text-base font-semibold text-foreground truncate">
-              Alerta {alert.id}
-            </h1>
-            <StatusBadge status={alert.status} />
-          </div>
-          <p className="text-xs text-muted-foreground truncate">{alert.group}</p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 function StatusBadge({ status }: { status: "active" | "cancelled" }) {
   if (status === "active") {
     return (
-      <Badge className="bg-red-50 text-red-600 border-red-200 text-[10px] px-1.5 py-0 font-medium uppercase tracking-wide">
+      <Badge
+        variant="destructive"
+        className="h-5 px-1.5 text-[10px] font-medium uppercase tracking-wide"
+      >
         Activa
       </Badge>
     )
   }
   return (
-    <Badge className="bg-muted text-muted-foreground border-border text-[10px] px-1.5 py-0 font-medium uppercase tracking-wide">
+    <Badge
+      variant="secondary"
+      className="h-5 px-1.5 text-[10px] font-medium uppercase tracking-wide"
+    >
       Cancelada
     </Badge>
   )
@@ -121,9 +110,9 @@ function ActivePulse() {
   return (
     <div className="flex items-center justify-center py-3">
       <div className="relative flex items-center justify-center">
-        <span className="absolute inline-flex h-10 w-10 rounded-full bg-red-400/20 animate-ping" />
-        <span className="absolute inline-flex h-7 w-7 rounded-full bg-red-400/30 animate-pulse" />
-        <span className="relative inline-flex h-4 w-4 rounded-full bg-red-500" />
+        <span className="absolute inline-flex h-10 w-10 rounded-full bg-destructive/20 animate-ping" />
+        <span className="absolute inline-flex h-7 w-7 rounded-full bg-destructive/30 animate-pulse" />
+        <span className="relative inline-flex h-4 w-4 rounded-full bg-destructive" />
       </div>
     </div>
   )
@@ -131,19 +120,23 @@ function ActivePulse() {
 
 function UserInfoCard({ alert }: { alert: typeof MOCK_ALERT }) {
   return (
-    <Card className="border-border shadow-none">
+    <Card>
       <CardContent className="p-4">
         <div className="flex items-center gap-3">
-          <Avatar className="h-11 w-11 border-2 border-red-200">
-            <AvatarFallback className="bg-red-50 text-red-600 text-sm font-semibold">
+          <Avatar className="h-11 w-11 rounded-xl border-2 border-destructive/20">
+            <AvatarFallback className="rounded-xl bg-destructive/10 text-sm font-semibold text-destructive">
               {alert.user.initials}
             </AvatarFallback>
           </Avatar>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-foreground">{alert.user.name}</p>
-            <p className="text-xs text-muted-foreground">{alert.user.email}</p>
+          <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+            <span className="truncate text-sm font-semibold text-foreground">
+              {alert.user.name}
+            </span>
+            <span className="truncate text-xs text-muted-foreground">
+              {alert.user.email}
+            </span>
           </div>
-          <div className="text-right shrink-0">
+          <div className="shrink-0 text-right">
             <p className="text-xs font-medium text-foreground">
               {formatTime(alert.timestamp)}
             </p>
@@ -152,11 +145,11 @@ function UserInfoCard({ alert }: { alert: typeof MOCK_ALERT }) {
             </p>
           </div>
         </div>
-        <div className="mt-3 pt-3 border-t border-border">
-          <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-1">
+        <div className="mt-3 border-t pt-3">
+          <p className="mb-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
             Fecha
           </p>
-          <p className="text-xs text-foreground capitalize">
+          <p className="text-xs capitalize text-foreground">
             {formatDate(alert.timestamp)}
           </p>
         </div>
@@ -167,42 +160,47 @@ function UserInfoCard({ alert }: { alert: typeof MOCK_ALERT }) {
 
 function LocationCard({ alert }: { alert: typeof MOCK_ALERT }) {
   return (
-    <Card className="border-border shadow-none">
+    <Card>
       <CardContent className="p-4">
         <div className="flex items-start gap-3">
-          <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-secondary shrink-0 mt-0.5">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-foreground">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-              <circle cx="12" cy="10" r="3" />
-            </svg>
+          <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted">
+            <MapPin className="h-4 w-4 text-muted-foreground" />
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-1">
+          <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+            <p className="mb-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
               Ubicacion
             </p>
-            <p className="text-sm font-medium text-foreground leading-snug">
+            <p className="text-sm font-medium leading-snug text-foreground">
               {alert.address}
             </p>
-            <p className="text-xs text-muted-foreground mt-0.5">{alert.city}</p>
+            <p className="mt-0.5 text-xs text-muted-foreground">{alert.city}</p>
           </div>
         </div>
 
-        <div className="mt-3 pt-3 border-t border-border flex items-center justify-between">
+        <div className="mt-3 flex items-center justify-between border-t pt-3">
           <div>
-            <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-0.5">
+            <p className="mb-0.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
               Coordenadas
             </p>
-            <p className="text-xs text-foreground font-mono">
+            <p className="font-mono text-xs text-foreground">
               {alert.coords.lat.toFixed(4)}, {alert.coords.lng.toFixed(4)}
             </p>
           </div>
           <div className="text-right">
-            <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-0.5">
+            <p className="mb-0.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
               Precision
             </p>
-            <div className="flex items-center gap-1 justify-end">
-              <span className={`inline-block w-1.5 h-1.5 rounded-full ${alert.accuracy <= 15 ? "bg-emerald-500" : alert.accuracy <= 50 ? "bg-amber-500" : "bg-red-500"}`} />
-              <p className="text-xs text-foreground font-mono">
+            <div className="flex items-center justify-end gap-1">
+              <span
+                className={`inline-block h-1.5 w-1.5 rounded-full ${
+                  alert.accuracy <= 15
+                    ? "bg-[hsl(var(--success))]"
+                    : alert.accuracy <= 50
+                      ? "bg-amber-500"
+                      : "bg-destructive"
+                }`}
+              />
+              <p className="font-mono text-xs text-foreground">
                 {alert.accuracy}m
               </p>
             </div>
@@ -215,33 +213,36 @@ function LocationCard({ alert }: { alert: typeof MOCK_ALERT }) {
 
 function MapPlaceholder({ alert }: { alert: typeof MOCK_ALERT }) {
   return (
-    <Card className="border-border shadow-none overflow-hidden">
-      <div className="relative bg-secondary h-48 flex flex-col items-center justify-center">
+    <Card className="overflow-hidden">
+      <div
+        className="relative flex h-48 flex-col items-center justify-center bg-muted"
+      >
         {/* Grid pattern */}
-        <div className="absolute inset-0 opacity-[0.08]" style={{
-          backgroundImage: "linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
-        }} />
+        <div
+          className="absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage:
+              "linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)",
+            backgroundSize: "24px 24px",
+          }}
+        />
 
         {/* Center pin */}
         <div className="relative z-[1] flex flex-col items-center">
           <div className="relative">
-            <span className="absolute -inset-3 rounded-full bg-red-500/10 animate-pulse" />
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="relative z-[1]">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" fill="hsl(0 72% 51%)" stroke="hsl(0 72% 51%)" strokeWidth="1" />
-              <circle cx="12" cy="10" r="3" fill="white" />
-            </svg>
+            <span className="absolute -inset-3 animate-pulse rounded-full bg-destructive/10" />
+            <MapPin className="relative z-[1] h-7 w-7 text-destructive" fill="hsl(var(--destructive))" />
           </div>
-          <p className="text-[10px] text-muted-foreground mt-3 font-medium">
+          <p className="mt-3 text-[10px] font-medium text-muted-foreground">
             Mapa no disponible en modo demo
           </p>
-          <p className="text-[10px] text-muted-foreground font-mono">
+          <p className="font-mono text-[10px] text-muted-foreground">
             {alert.coords.lat.toFixed(4)}, {alert.coords.lng.toFixed(4)}
           </p>
         </div>
 
         {/* Accuracy ring */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full border-2 border-dashed border-red-300/40 pointer-events-none" />
+        <div className="pointer-events-none absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-dashed border-destructive/20" />
       </div>
     </Card>
   )
@@ -259,87 +260,84 @@ function ResponseButtons({
   onCancel: () => void
 }) {
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-20 bg-background border-t border-border">
-      <div className="max-w-lg mx-auto px-4 py-3">
-        {/* Top row: Recibido + Estoy yendo */}
-        <div className="grid grid-cols-2 gap-2 mb-2">
+    <div className="fixed inset-x-0 bottom-0 z-20 border-t bg-background/95 backdrop-blur-sm">
+      <div className="mx-auto max-w-lg px-5 pb-8 pt-3">
+        {/* Top row */}
+        <div className="mb-2 grid grid-cols-2 gap-2">
           <Button
             variant={responseStatus === "received" ? "default" : "outline"}
-            className={`h-11 text-sm font-medium gap-2 ${
+            className={`h-11 gap-2 text-sm font-medium ${
               responseStatus === "received"
-                ? "bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-600"
-                : "border-border text-foreground hover:bg-secondary"
+                ? "border-transparent text-[hsl(var(--success-foreground))]"
+                : ""
             }`}
-            onClick={() => onResponse(responseStatus === "received" ? "none" : "received")}
+            style={
+              responseStatus === "received"
+                ? { backgroundColor: "hsl(var(--success))" }
+                : undefined
+            }
+            onClick={() =>
+              onResponse(responseStatus === "received" ? "none" : "received")
+            }
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              {responseStatus === "received" ? (
-                <>
-                  <path d="M20 6L9 17l-5-5" />
-                </>
-              ) : (
-                <>
-                  <path d="M20 6L9 17l-5-5" />
-                </>
-              )}
-            </svg>
+            <Check className="h-4 w-4" />
             Recibido
           </Button>
 
           <Button
             variant={responseStatus === "going" ? "default" : "outline"}
-            className={`h-11 text-sm font-medium gap-2 ${
+            className={`h-11 gap-2 text-sm font-medium ${
               responseStatus === "going"
-                ? "bg-blue-600 hover:bg-blue-700 text-white border-blue-600"
-                : "border-border text-foreground hover:bg-secondary"
+                ? "border-transparent bg-foreground text-background hover:bg-foreground/90"
+                : ""
             }`}
-            onClick={() => onResponse(responseStatus === "going" ? "none" : "going")}
+            onClick={() =>
+              onResponse(responseStatus === "going" ? "none" : "going")
+            }
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10" />
-              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
-            </svg>
+            <Navigation className="h-4 w-4" />
             Estoy yendo
           </Button>
         </div>
 
-        {/* Bottom row: Llamar + Cancelar */}
+        {/* Bottom row */}
         <div className="grid grid-cols-2 gap-2">
           <Button
             variant="outline"
-            className="h-11 text-sm font-medium gap-2 border-border text-foreground hover:bg-secondary"
+            className="h-11 gap-2 text-sm font-medium"
             onClick={onCall}
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-            </svg>
+            <Phone className="h-4 w-4" />
             Llamar
           </Button>
 
           <Button
             variant="outline"
-            className="h-11 text-sm font-medium gap-2 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+            className="h-11 gap-2 text-sm font-medium border-destructive/30 text-destructive hover:bg-destructive/5 hover:text-destructive"
             onClick={onCancel}
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="15" y1="9" x2="9" y2="15" />
-              <line x1="9" y1="9" x2="15" y2="15" />
-            </svg>
+            <XCircle className="h-4 w-4" />
             Cancelar
           </Button>
         </div>
 
         {/* Response confirmation */}
         {responseStatus !== "none" && (
-          <div className={`mt-2 rounded-lg px-3 py-2 flex items-center gap-2 text-xs font-medium ${
-            responseStatus === "received"
-              ? "bg-emerald-50 text-emerald-700"
-              : "bg-blue-50 text-blue-700"
-          }`}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20 6L9 17l-5-5" />
-            </svg>
+          <div
+            className="mt-2 flex items-center gap-2 rounded-lg px-3 py-2.5 text-xs font-medium"
+            style={
+              responseStatus === "received"
+                ? {
+                    backgroundColor: "hsl(var(--success) / 0.1)",
+                    color: "hsl(var(--success))",
+                  }
+                : {
+                    backgroundColor: "hsl(var(--foreground) / 0.05)",
+                    color: "hsl(var(--foreground))",
+                  }
+            }
+          >
+            <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
             {responseStatus === "received"
               ? "Has confirmado recibir la alerta"
               : "Has indicado que vas en camino"}
@@ -394,23 +392,18 @@ function CancelPinDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-[340px] rounded-2xl">
-        <DialogHeader>
-          <div className="flex justify-center mb-2">
-            <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(0 72% 51%)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-              </svg>
-            </div>
+      <DialogContent className="mx-4 max-w-sm rounded-2xl">
+        <DialogHeader className="items-center">
+          <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10">
+            <Lock className="h-6 w-6 text-destructive" />
           </div>
-          <DialogTitle className="text-center text-base">Cancelar Alerta</DialogTitle>
+          <DialogTitle className="text-center">Cancelar Alerta</DialogTitle>
           <DialogDescription className="text-center text-xs">
             Ingresa el PIN del grupo para confirmar la cancelacion
           </DialogDescription>
         </DialogHeader>
 
-        <div className="flex flex-col items-center gap-3 py-2">
+        <div className="flex flex-col items-center gap-4 py-2">
           <InputOTP
             maxLength={4}
             value={pin}
@@ -420,47 +413,61 @@ function CancelPinDialog({
             }}
           >
             <InputOTPGroup>
-              <InputOTPSlot index={0} className={error ? "border-red-400" : ""} />
-              <InputOTPSlot index={1} className={error ? "border-red-400" : ""} />
-              <InputOTPSlot index={2} className={error ? "border-red-400" : ""} />
-              <InputOTPSlot index={3} className={error ? "border-red-400" : ""} />
+              <InputOTPSlot
+                index={0}
+                className={error ? "border-destructive" : ""}
+              />
+              <InputOTPSlot
+                index={1}
+                className={error ? "border-destructive" : ""}
+              />
+              <InputOTPSlot
+                index={2}
+                className={error ? "border-destructive" : ""}
+              />
+              <InputOTPSlot
+                index={3}
+                className={error ? "border-destructive" : ""}
+              />
             </InputOTPGroup>
           </InputOTP>
 
           {error && (
-            <p className="text-xs text-red-600 font-medium">PIN incorrecto. Intenta de nuevo.</p>
+            <p className="text-xs font-medium text-destructive">
+              PIN incorrecto. Intenta de nuevo.
+            </p>
           )}
 
-          <p className="text-[10px] text-muted-foreground">PIN de prueba: 1234</p>
-        </div>
+          <div className="flex w-full flex-col gap-2">
+            <Button
+              variant="destructive"
+              className="h-11 w-full font-medium"
+              disabled={pin.length < 4 || verifying}
+              onClick={handleVerify}
+            >
+              {verifying ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Verificando...
+                </>
+              ) : (
+                "Confirmar cancelacion"
+              )}
+            </Button>
+            <Button
+              variant="ghost"
+              className="h-10 w-full text-sm text-muted-foreground"
+              onClick={() => handleOpenChange(false)}
+              disabled={verifying}
+            >
+              Volver
+            </Button>
+          </div>
 
-        <DialogFooter className="flex flex-col gap-2 sm:flex-col">
-          <Button
-            className="w-full h-11 bg-red-600 hover:bg-red-700 text-white font-medium"
-            disabled={pin.length < 4 || verifying}
-            onClick={handleVerify}
-          >
-            {verifying ? (
-              <span className="flex items-center gap-2">
-                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                </svg>
-                Verificando...
-              </span>
-            ) : (
-              "Confirmar cancelacion"
-            )}
-          </Button>
-          <Button
-            variant="ghost"
-            className="w-full h-10 text-sm text-muted-foreground"
-            onClick={() => handleOpenChange(false)}
-            disabled={verifying}
-          >
-            Volver
-          </Button>
-        </DialogFooter>
+          <p className="text-center text-[10px] text-muted-foreground">
+            PIN de prueba: 1234
+          </p>
+        </div>
       </DialogContent>
     </Dialog>
   )
@@ -477,30 +484,36 @@ function CallingDialog({
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[340px] rounded-2xl">
-        <DialogHeader>
-          <div className="flex justify-center mb-2">
-            <Avatar className="h-16 w-16 border-2 border-border">
-              <AvatarFallback className="bg-secondary text-foreground text-lg font-semibold">
+      <DialogContent className="mx-4 max-w-sm rounded-2xl">
+        <DialogHeader className="items-center">
+          <div className="mb-2">
+            <Avatar className="h-16 w-16 rounded-xl">
+              <AvatarFallback className="rounded-xl bg-muted text-lg font-semibold text-foreground">
                 {user.initials}
               </AvatarFallback>
             </Avatar>
           </div>
-          <DialogTitle className="text-center text-base">Llamar a {user.name}</DialogTitle>
+          <DialogTitle className="text-center">
+            Llamar a {user.name}
+          </DialogTitle>
           <DialogDescription className="text-center text-xs">
             Se abrira la aplicacion de telefono de tu dispositivo
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-2 pt-2">
-          <Button className="w-full h-11 bg-emerald-600 hover:bg-emerald-700 text-white font-medium gap-2">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-            </svg>
+          <Button
+            className="h-11 w-full font-medium"
+            style={{
+              backgroundColor: "hsl(var(--success))",
+              color: "hsl(var(--success-foreground))",
+            }}
+          >
+            <Phone className="h-4 w-4" />
             Llamar ahora
           </Button>
           <Button
             variant="ghost"
-            className="w-full h-10 text-sm text-muted-foreground"
+            className="h-10 w-full text-sm text-muted-foreground"
             onClick={() => onOpenChange(false)}
           >
             Cancelar
@@ -527,39 +540,66 @@ export function AlertDetailScreen() {
   const isActive = alert.status === "active"
 
   return (
-    <div className="min-h-dvh bg-background flex flex-col max-w-lg mx-auto">
-      <AlertHeader alert={alert} />
+    <div className="flex min-h-svh flex-col bg-background">
+      {/* Header */}
+      <header className="sticky top-0 z-10 border-b bg-background/95 px-5 pb-4 pt-12 backdrop-blur-sm">
+        <div className="mx-auto flex w-full max-w-lg items-center gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-9 w-9 shrink-0 text-muted-foreground"
+            aria-label="Volver"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div className="flex min-w-0 flex-1 flex-col">
+            <div className="flex items-center gap-2">
+              <h1 className="truncate text-lg font-bold tracking-tight text-foreground">
+                Alerta {alert.id}
+              </h1>
+              <StatusBadge status={alert.status} />
+            </div>
+            <p className="truncate text-xs text-muted-foreground">
+              {alert.group}
+            </p>
+          </div>
+        </div>
+      </header>
 
       {/* Scrollable content */}
-      <div className={`flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-3 ${isActive ? "pb-44" : "pb-6"}`}>
-        {/* Active pulse indicator */}
-        {isActive && <ActivePulse />}
+      <div
+        className={`flex-1 px-5 pt-4 ${isActive ? "pb-44" : "pb-8"}`}
+      >
+        <div className="mx-auto flex w-full max-w-lg flex-col gap-3">
+          {/* Active pulse indicator */}
+          {isActive && <ActivePulse />}
 
-        {/* Cancelled banner */}
-        {!isActive && (
-          <div className="rounded-lg bg-muted px-4 py-3 flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-background flex items-center justify-center shrink-0">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="15" y1="9" x2="9" y2="15" />
-                <line x1="9" y1="9" x2="15" y2="15" />
-              </svg>
+          {/* Cancelled banner */}
+          {!isActive && (
+            <div className="flex items-center gap-3 rounded-lg bg-muted px-4 py-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-background">
+                <XCircle className="h-4 w-4 text-muted-foreground" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-foreground">
+                  Alerta cancelada
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Esta alerta fue cancelada con PIN
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm font-medium text-foreground">Alerta cancelada</p>
-              <p className="text-xs text-muted-foreground">Esta alerta fue cancelada con PIN</p>
-            </div>
-          </div>
-        )}
+          )}
 
-        {/* User info */}
-        <UserInfoCard alert={alert} />
+          {/* User info */}
+          <UserInfoCard alert={alert} />
 
-        {/* Location */}
-        <LocationCard alert={alert} />
+          {/* Location */}
+          <LocationCard alert={alert} />
 
-        {/* Map placeholder */}
-        <MapPlaceholder alert={alert} />
+          {/* Map placeholder */}
+          <MapPlaceholder alert={alert} />
+        </div>
       </div>
 
       {/* Action buttons - only when active */}
