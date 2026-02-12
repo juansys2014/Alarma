@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useMemo, useCallback } from "react"
-import { useNavigation } from "./app-shell"
+import { useNavigate } from "react-router-dom"
 import {
   ArrowLeft,
   Search,
@@ -242,7 +242,7 @@ function isValidEmail(email: string): boolean {
 }
 
 export function ContactsScreen() {
-  const { goBack } = useNavigation()
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<string>("contactos")
   const [searchQuery, setSearchQuery] = useState("")
   const [searchFocused, setSearchFocused] = useState(false)
@@ -291,7 +291,7 @@ export function ContactsScreen() {
               size="icon"
               className="h-9 w-9 shrink-0 text-muted-foreground"
               aria-label="Volver"
-              onClick={goBack}
+              onClick={() => navigate(-1)}
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>

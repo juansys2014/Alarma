@@ -1,7 +1,7 @@
 "use client"
 
-import { useNavigation } from "./app-shell"
-import { Users, Plus, ChevronRight, ShieldAlert, UserCircle } from "lucide-react"
+import { useNavigate } from "react-router-dom"
+import { Users, Plus, ChevronRight } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -96,7 +96,7 @@ function GroupCard({ group, onSelect }: { group: Group; onSelect: () => void }) 
 }
 
 export function GroupsList() {
-  const { navigate } = useNavigation()
+  const navigate = useNavigate()
   return (
     <div className="flex min-h-svh flex-col bg-background">
       {/* Header */}
@@ -112,17 +112,17 @@ export function GroupsList() {
       </header>
 
       {/* Group list */}
-      <div className="flex-1 px-5 pb-40 pt-4">
+      <div className="flex-1 px-5 pb-28 pt-4">
         <div className="mx-auto flex w-full max-w-lg flex-col gap-3">
           {MOCK_GROUPS.map((group) => (
-            <GroupCard key={group.id} group={group} onSelect={() => navigate("group-detail")} />
+            <GroupCard key={group.id} group={group} onSelect={() => navigate(`/groups/${group.id}`)} />
           ))}
 
           {/* Crear grupo inline */}
           <Button
             variant="outline"
             className="h-12 w-full border-dashed text-sm font-medium text-muted-foreground"
-            onClick={() => navigate("create-group")}
+            onClick={() => navigate("/groups/new")}
           >
             <Plus className="h-4 w-4" />
             Crear Grupo
@@ -130,51 +130,6 @@ export function GroupsList() {
         </div>
       </div>
 
-      {/* Bottom navigation */}
-      <nav className="fixed inset-x-0 bottom-0 z-20 border-t bg-background/95 backdrop-blur-sm">
-        <div className="mx-auto flex w-full max-w-lg items-center justify-around px-2 pb-6 pt-2">
-          <button
-            type="button"
-            className="flex flex-col items-center gap-1 px-4 py-1.5 text-foreground"
-            aria-label="Mis Grupos"
-          >
-            <Users className="h-5 w-5" />
-            <span className="text-[10px] font-semibold">Grupos</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate("contacts")}
-            className="flex flex-col items-center gap-1 px-4 py-1.5 text-muted-foreground transition-colors hover:text-foreground"
-            aria-label="Contactos"
-          >
-            <UserCircle className="h-5 w-5" />
-            <span className="text-[10px] font-medium">Contactos</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate("panic-button")}
-            className="flex flex-col items-center gap-1 px-4 py-1.5 text-destructive transition-colors"
-            aria-label="Boton de Panico"
-          >
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-destructive">
-              <ShieldAlert className="h-5 w-5 text-destructive-foreground" />
-            </div>
-            <span className="text-[10px] font-semibold">Panico</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate("alert-detail")}
-            className="flex flex-col items-center gap-1 px-4 py-1.5 text-muted-foreground transition-colors hover:text-foreground"
-            aria-label="Alertas"
-          >
-            <div className="relative">
-              <ShieldAlert className="h-5 w-5" />
-              <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-destructive" />
-            </div>
-            <span className="text-[10px] font-medium">Alertas</span>
-          </button>
-        </div>
-      </nav>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import { useNavigation } from "./app-shell"
+import { useNavigate } from "react-router-dom"
 import { Mail, ArrowRight, Loader2, CheckCircle2, AlertCircle, ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -15,7 +15,7 @@ type Step = "email" | "otp"
 type Status = "idle" | "loading" | "success" | "error"
 
 export function LoginForm() {
-  const { navigate } = useNavigation()
+  const navigate = useNavigate()
   const [step, setStep] = useState<Step>("email")
   const [email, setEmail] = useState("")
   const [otp, setOtp] = useState("")
@@ -64,7 +64,7 @@ export function LoginForm() {
 
     setStatus("success")
     setTimeout(() => {
-      navigate("groups")
+      navigate("/groups", { replace: true })
     }, 1200)
   }, [otp, navigate])
 

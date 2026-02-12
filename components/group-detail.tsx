@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useNavigation } from "./app-shell"
+import { useNavigate } from "react-router-dom"
 import {
   ArrowLeft,
   Users,
@@ -355,7 +355,7 @@ const TAB_CONFIG = [
 ] as const
 
 export function GroupDetail() {
-  const { navigate, goBack } = useNavigation()
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<string>("miembros")
 
   return (
@@ -369,7 +369,7 @@ export function GroupDetail() {
               size="icon"
               className="h-9 w-9 shrink-0 text-muted-foreground"
               aria-label="Volver"
-              onClick={goBack}
+              onClick={() => navigate(-1)}
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
@@ -421,7 +421,7 @@ export function GroupDetail() {
       {/* Tab content */}
       <div className="flex-1 px-5 pb-8 pt-4">
         <div className="mx-auto w-full max-w-lg">
-          {activeTab === "miembros" && <MembersTab onInvite={() => navigate("invite-member")} />}
+          {activeTab === "miembros" && <MembersTab onInvite={() => navigate("invite")} />}
           {activeTab === "destinatarios" && <RecipientsTab />}
           {activeTab === "dispositivos" && <DevicesTab />}
           {activeTab === "historial" && <HistoryTab />}

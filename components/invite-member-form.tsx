@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import { useNavigation } from "./app-shell"
+import { useNavigate } from "react-router-dom"
 import { ArrowLeft, Mail, Shield, User, Send, CheckCircle2, Loader2 } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -103,7 +103,7 @@ function SuccessScreen({ email, role, onReset }: { email: string; role: Role; on
           <Send className="h-4 w-4" />
           Invitar a otro miembro
         </Button>
-        <Button variant="ghost" className="h-10 w-full text-sm text-muted-foreground" onClick={goBack}>
+        <Button variant="ghost" className="h-10 w-full text-sm text-muted-foreground" onClick={() => navigate(-1)}>
           <ArrowLeft className="h-4 w-4" />
           Volver al grupo
         </Button>
@@ -113,7 +113,7 @@ function SuccessScreen({ email, role, onReset }: { email: string; role: Role; on
 }
 
 export function InviteMemberForm() {
-  const { goBack } = useNavigation()
+  const navigate = useNavigate()
   const [form, setForm] = useState<FormState>({
     email: "",
     role: "Miembro",
@@ -181,7 +181,7 @@ export function InviteMemberForm() {
               size="icon"
               className="h-9 w-9 shrink-0 text-muted-foreground"
               aria-label="Volver"
-              onClick={goBack}
+              onClick={() => navigate(-1)}
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
