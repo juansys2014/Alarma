@@ -272,9 +272,9 @@ function CallingDialog({ open, onOpenChange, user }: { open: boolean; onOpenChan
   )
 }
 
-export function AlertDetailScreen() {
+export function AlertDetailScreen({ eventId }: { eventId?: string }) {
   const router = useRouter()
-  const [alert, setAlert] = useState(MOCK_ALERT)
+  const [alert, setAlert] = useState({ ...MOCK_ALERT, id: eventId ?? MOCK_ALERT.id })
   const [responseStatus, setResponseStatus] = useState<ResponseStatus>("none")
   const [showCancelDialog, setShowCancelDialog] = useState(false)
   const [showCallDialog, setShowCallDialog] = useState(false)

@@ -1,5 +1,6 @@
 import { AlertDetailScreen } from "@/components/alert-detail-screen"
 
-export default function EventDetailPage() {
-  return <AlertDetailScreen />
+export default async function EventDetailPage({ params }: { params: Promise<{ eventId: string }> }) {
+  const { eventId } = await params
+  return <AlertDetailScreen eventId={eventId} />
 }
