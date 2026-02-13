@@ -1,15 +1,3 @@
-"use client"
-
-import { AuthProvider } from "@/lib/auth-context"
-import { BottomNav } from "@/components/bottom-nav"
-
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <AuthProvider>
-      <div className="flex min-h-svh flex-col bg-background">
-        <div className="flex-1 pb-28">{children}</div>
-        <BottomNav />
-      </div>
-    </AuthProvider>
-  )
+  return <>{children}</>
 }

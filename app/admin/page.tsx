@@ -1,5 +1,3 @@
-import { AdminDashboard } from "@/components/admin-dashboard"
-
 export default function AdminPage() {
-  return <AdminDashboard />
+  return <div style={{ padding: 40, fontSize: 24 }}>ADMIN OK</div>
 }
