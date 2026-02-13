@@ -1,5 +1,5 @@
 import { AdminGroups } from "@/components/admin-groups"
 
-export default function AdminGruposPage() {
+export default function Page() {
   return <AdminGroups />
 }
