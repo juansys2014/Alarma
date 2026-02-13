@@ -328,7 +328,7 @@ export function PanicButtonScreen() {
           setHoldProgress(100)
           // Auto-navigate to event detail after brief feedback
           setTimeout(() => {
-            router.push("/eventos/ALR-0042")
+            router.push("/evento/ALR-0042")
           }, 1200)
         }, 2000)
       }
