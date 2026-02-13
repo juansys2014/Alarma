@@ -1,9 +1,5 @@
+import { AdminDashboard } from "@/components/admin-dashboard"
+
 export default function AdminPage() {
-  return <div>ADMIN OK</div>;
+  return <AdminDashboard />
 }
-
-
-
-
-
-
