@@ -2,20 +2,22 @@
 
 import { useEffect } from "react"
 import { useRouter, useParams } from "next/navigation"
-import { canAccessGroupAdminRoute } from "@/lib/permissions"
+import { useAuth } from "@/lib/auth-context"
 import { GroupAdminPanel } from "@/components/group-admin-panel"
 
 export default function GroupAdminPage() {
   const router = useRouter()
   const { groupId } = useParams<{ groupId: string }>()
+  const { canAdminGroup } = useAuth()
+  const hasAccess = canAdminGroup(groupId)
 
   useEffect(() => {
-    if (!canAccessGroupAdminRoute(groupId)) {
+    if (!hasAccess) {
       router.replace(`/grupos/${groupId}`)
     }
-  }, [router, groupId])
+  }, [hasAccess, router, groupId])
 
-  if (!canAccessGroupAdminRoute(groupId)) return null
+  if (!hasAccess) return null
 
   return <GroupAdminPanel groupId={groupId} />
 }

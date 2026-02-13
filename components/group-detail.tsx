@@ -20,7 +20,7 @@ import {
   AlertCircle,
 } from "lucide-react"
 import Link from "next/link"
-import { canAccessGroupAdminRoute } from "@/lib/permissions"
+import { useAuth } from "@/lib/auth-context"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -356,15 +356,12 @@ const TAB_CONFIG = [
   { value: "historial", label: "Historial", icon: Clock },
 ] as const
 
-export function GroupDetail() {
+export function GroupDetail({ groupId }: { groupId: string }) {
   const router = useRouter()
   const pathname = usePathname()
   const [activeTab, setActiveTab] = useState<string>("miembros")
-
-  // Extract groupId from pathname (e.g. /grupos/1 -> "1")
-  const segments = pathname.split("/")
-  const groupId = segments[segments.indexOf("grupos") + 1] || ""
-  const showAdminButton = groupId && canAccessGroupAdminRoute(groupId)
+  const { canAdminGroup } = useAuth()
+  const showAdminButton = canAdminGroup(groupId)
 
   return (
     <div className="flex min-h-svh flex-col bg-background">

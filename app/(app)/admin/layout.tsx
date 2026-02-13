@@ -2,18 +2,19 @@
 
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { canAccessSystemAdmin } from "@/lib/permissions"
+import { useAuth } from "@/lib/auth-context"
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
+  const { isSystemAdmin } = useAuth()
 
   useEffect(() => {
-    if (!canAccessSystemAdmin()) {
+    if (!isSystemAdmin) {
       router.replace("/grupos")
     }
-  }, [router])
+  }, [isSystemAdmin, router])
 
-  if (!canAccessSystemAdmin()) return null
+  if (!isSystemAdmin) return null
 
   return <>{children}</>
 }
