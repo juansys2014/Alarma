@@ -1,6 +1,5 @@
 import { GroupDetail } from "@/components/group-detail"
 
-export default async function GroupDetailPage({ params }: { params: Promise<{ groupId: string }> }) {
-  const { groupId } = await params
-  return <GroupDetail groupId={groupId} />
+export default function Page({ params }: { params: { groupId: string } }) {
+  return <GroupDetail groupId={params.groupId} />
 }
