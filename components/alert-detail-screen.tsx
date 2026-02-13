@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import {
   ArrowLeft,
@@ -73,7 +73,7 @@ function formatDate(iso: string) {
   })
 }
 
-function timeSince(iso: string) {
+function computeTimeSince(iso: string) {
   const now = new Date()
   const then = new Date(iso)
   const diffMs = now.getTime() - then.getTime()
@@ -82,6 +82,16 @@ function timeSince(iso: string) {
   if (mins < 60) return `Hace ${mins} min`
   const hrs = Math.floor(mins / 60)
   return `Hace ${hrs}h ${mins % 60}m`
+}
+
+function useTimeSince(iso: string) {
+  const [text, setText] = useState("")
+  useEffect(() => {
+    setText(computeTimeSince(iso))
+    const id = setInterval(() => setText(computeTimeSince(iso)), 30000)
+    return () => clearInterval(id)
+  }, [iso])
+  return text
 }
 
 // --- Sub-components ---
@@ -120,6 +130,7 @@ function ActivePulse() {
 }
 
 function UserInfoCard({ alert }: { alert: typeof MOCK_ALERT }) {
+  const elapsed = useTimeSince(alert.timestamp)
   return (
     <Card>
       <CardContent className="p-4">
@@ -138,11 +149,11 @@ function UserInfoCard({ alert }: { alert: typeof MOCK_ALERT }) {
             </span>
           </div>
           <div className="shrink-0 text-right">
-            <p className="text-xs font-medium text-foreground">
+            <p suppressHydrationWarning className="text-xs font-medium text-foreground">
               {formatTime(alert.timestamp)}
             </p>
             <p className="text-[10px] text-muted-foreground">
-              {timeSince(alert.timestamp)}
+              {elapsed}
             </p>
           </div>
         </div>
@@ -150,7 +161,7 @@ function UserInfoCard({ alert }: { alert: typeof MOCK_ALERT }) {
           <p className="mb-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
             Fecha
           </p>
-          <p className="text-xs capitalize text-foreground">
+          <p suppressHydrationWarning className="text-xs capitalize text-foreground">
             {formatDate(alert.timestamp)}
           </p>
         </div>
