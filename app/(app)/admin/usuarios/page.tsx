@@ -1,5 +1,5 @@
 import { AdminUsers } from "@/components/admin-users"
 
-export default function AdminUsuariosPage() {
+export default function Page() {
   return <AdminUsers />
 }
