@@ -1,9 +1,9 @@
 "use client"
 
 import { useParams } from "next/navigation"
-import { AlertDetailScreen } from "@/components/alert-detail-screen"
+import { EventDetailView } from "@/components/event-detail"
 
 export default function EventDetailPage() {
   const { eventId } = useParams<{ eventId: string }>()
-  return <AlertDetailScreen eventId={eventId} />
+  return <EventDetailView eventId={eventId} />
 }

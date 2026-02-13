@@ -31,37 +31,39 @@ const MOCK_ALERT = {
 
 const MOCK_PIN = "1234"
 
-function formatTime(iso: string) {
-  return new Date(iso).toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true })
-}
-
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("es-MX", { weekday: "long", day: "numeric", month: "long", year: "numeric" })
-}
-
-function computeTimeSince(iso: string) {
-  const mins = Math.floor((Date.now() - new Date(iso).getTime()) / 60000)
-  if (mins < 1) return "Hace unos segundos"
-  if (mins < 60) return `Hace ${mins} min`
-  const hrs = Math.floor(mins / 60)
-  return `Hace ${hrs}h ${mins % 60}m`
-}
-
-function useTimeSince(iso: string) {
-  const [text, setText] = useState("")
-  useEffect(() => {
-    setText(computeTimeSince(iso))
-    const id = setInterval(() => setText(computeTimeSince(iso)), 30000)
-    return () => clearInterval(id)
-  }, [iso])
-  return text
-}
+/* ---------- client-only helpers ---------- */
 
 function useHasMounted() {
   const [m, setM] = useState(false)
   useEffect(() => { setM(true) }, [])
   return m
 }
+
+function useElapsed(iso: string) {
+  const [text, setText] = useState("")
+  useEffect(() => {
+    const calc = () => {
+      const mins = Math.floor((Date.now() - new Date(iso).getTime()) / 60000)
+      if (mins < 1) return "Hace unos segundos"
+      if (mins < 60) return `Hace ${mins} min`
+      return `Hace ${Math.floor(mins / 60)}h ${mins % 60}m`
+    }
+    setText(calc())
+    const id = setInterval(() => setText(calc()), 30000)
+    return () => clearInterval(id)
+  }, [iso])
+  return text
+}
+
+function fmtTime(iso: string) {
+  return new Date(iso).toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true })
+}
+
+function fmtDate(iso: string) {
+  return new Date(iso).toLocaleDateString("es-MX", { weekday: "long", day: "numeric", month: "long", year: "numeric" })
+}
+
+/* ---------- sub-components ---------- */
 
 function StatusBadge({ status }: { status: "active" | "cancelled" }) {
   if (status === "active") return <Badge variant="destructive" className="h-5 px-1.5 text-[10px] font-medium uppercase tracking-wide">Activa</Badge>
@@ -81,8 +83,8 @@ function ActivePulse() {
 }
 
 function UserInfoCard({ alert }: { alert: typeof MOCK_ALERT }) {
-  const elapsed = useTimeSince(alert.timestamp)
   const mounted = useHasMounted()
+  const elapsed = useElapsed(alert.timestamp)
 
   return (
     <Card>
@@ -96,13 +98,13 @@ function UserInfoCard({ alert }: { alert: typeof MOCK_ALERT }) {
             <span className="truncate text-xs text-muted-foreground">{alert.user.email}</span>
           </div>
           <div className="shrink-0 text-right">
-            <p className="text-xs font-medium text-foreground">{mounted ? formatTime(alert.timestamp) : "\u00A0"}</p>
+            <p className="text-xs font-medium text-foreground">{mounted ? fmtTime(alert.timestamp) : "\u00A0"}</p>
             <p className="text-[10px] text-muted-foreground">{elapsed || "\u00A0"}</p>
           </div>
         </div>
         <div className="mt-3 border-t pt-3">
           <p className="mb-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Fecha</p>
-          <p className="text-xs capitalize text-foreground">{mounted ? formatDate(alert.timestamp) : "\u00A0"}</p>
+          <p className="text-xs capitalize text-foreground">{mounted ? fmtDate(alert.timestamp) : "\u00A0"}</p>
         </div>
       </CardContent>
     </Card>
@@ -272,7 +274,9 @@ function CallingDialog({ open, onOpenChange, user }: { open: boolean; onOpenChan
   )
 }
 
-export function AlertDetailScreen({ eventId }: { eventId?: string }) {
+/* ---------- main export ---------- */
+
+export function EventDetailView({ eventId }: { eventId?: string }) {
   const router = useRouter()
   const [alert, setAlert] = useState({ ...MOCK_ALERT, id: eventId ?? MOCK_ALERT.id })
   const [responseStatus, setResponseStatus] = useState<ResponseStatus>("none")
