@@ -19,6 +19,8 @@ import {
   XCircle,
   AlertCircle,
 } from "lucide-react"
+import Link from "next/link"
+import { canAccessGroupAdminRoute } from "@/lib/permissions"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -359,6 +361,11 @@ export function GroupDetail() {
   const pathname = usePathname()
   const [activeTab, setActiveTab] = useState<string>("miembros")
 
+  // Extract groupId from pathname (e.g. /grupos/1 -> "1")
+  const segments = pathname.split("/")
+  const groupId = segments[segments.indexOf("grupos") + 1] || ""
+  const showAdminButton = groupId && canAccessGroupAdminRoute(groupId)
+
   return (
     <div className="flex min-h-svh flex-col bg-background">
       {/* Header */}
@@ -387,6 +394,18 @@ export function GroupDetail() {
                 </span>
               </div>
             </div>
+            {showAdminButton && (
+              <Link href={`/grupos/${groupId}/admin`}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 gap-1.5 text-xs font-medium"
+                >
+                  <Shield className="h-3.5 w-3.5" />
+                  Administrar
+                </Button>
+              </Link>
+            )}
             <Button
               variant="ghost"
               size="icon"
