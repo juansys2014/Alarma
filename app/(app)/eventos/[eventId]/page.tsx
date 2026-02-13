@@ -1,6 +1,9 @@
+"use client"
+
+import { useParams } from "next/navigation"
 import { AlertDetailScreen } from "@/components/alert-detail-screen"
 
-export default async function EventDetailPage({ params }: { params: Promise<{ eventId: string }> }) {
-  const { eventId } = await params
+export default function EventDetailPage() {
+  const { eventId } = useParams<{ eventId: string }>()
   return <AlertDetailScreen eventId={eventId} />
 }
